@@ -42,7 +42,11 @@ class lemsi {
 
 
         if (!empty($missingColumns)) {
-            self::addColumns($missingColumns);
+            $arr = [];
+            foreach ($missingColumns as $key => $value) {
+                array_push($arr, array($value => $data->$value));
+            }
+            self::addColumns($arr);
         }
 
         $query = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
@@ -84,7 +88,7 @@ class lemsi {
         
         $requiredColumns = ['id'];
         foreach($data as $key => $row) {
-            array_push($requiredColumns, array($key => $row));
+            array_push($requiredColumns, $key);
         }
         $missingColumns = array_diff($requiredColumns, $existingColumns);
         return $missingColumns;

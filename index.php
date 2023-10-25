@@ -2,14 +2,14 @@
 
 include  'lemsi.php';
 
-lemsi::connect('localhost', 'root', 'root', 'database name');
+lemsi::connect('localhost', 'root', 'root', 'orm');
 
 $data = lemsi::select('users');                             //select table in database
 
 $data->name = 'John Doe';                                   //column name
 $data->email = 'john.doeфыasdasdв@example.com';             //column email
 $data->password = 'password123';                            //column password
-$data->age = 1;                                             //column age     (in db width INT type)         
+$data->age = 1;                                             //column age     (in db width INT type)      
 
 lemsi::save($data);                                         //store changes
 
