@@ -69,10 +69,7 @@ class lemsi {
 
     public static function createTable() {
         $query = "CREATE TABLE IF NOT EXISTS " . self::$table . " (
-            id INT(11) AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            age INT(3) NOT NULL,
-            email VARCHAR(255) NOT NULL
+            id INT(11) AUTO_INCREMENT PRIMARY KEY
         )";
         $stmt = self::$db->prepare($query);
         
@@ -86,8 +83,8 @@ class lemsi {
         $existingColumns = $stmt->fetchAll(PDO::FETCH_COLUMN);
         
         $requiredColumns = ['id'];
-        foreach($data as $key =>  $row) {
-            array_push($requiredColumns, $key);
+        foreach($data as $key => $row) {
+            array_push($requiredColumns, array($key => $row));
         }
         $missingColumns = array_diff($requiredColumns, $existingColumns);
         return $missingColumns;
@@ -96,16 +93,19 @@ class lemsi {
     public static function addColumns($data) {
         
         foreach ($data as $key => $column) {
-            $type = gettype($column);
-            if($type === 'integer') {
-                $type = "INT";
-                $k = '11';
-            } else if($type === 'string') {
-                $type = "VARCHAR";
-                $k = '255';
-            } else {
-                $type = "VARCHAR";
-                $k = '255';
+            foreach($column as $key => $row) {
+                $type = gettype($row);
+                if($type === 'integer') {
+                    $type = "INT";
+                    $k = '11';
+                } else if($type === 'string') {
+                    $type = "VARCHAR";
+                    $k = '255';
+                } else {
+                    $type = "VARCHAR";
+                    $k = '255';
+                }
+                $column = $key;
             }
             $query = "ALTER TABLE " . self::$table . " ADD COLUMN " . $column . " ".$type."(".$k.")";
             $stmt = self::$db->prepare($query);

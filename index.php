@@ -2,7 +2,7 @@
 
 include  'lemsi.php';
 
-lemsi::connect('localhost', 'root', 'root', 'orm');
+lemsi::connect('localhost', 'root', 'root', 'database name');
 
 $data = lemsi::select('users');                             //select table in database
 
