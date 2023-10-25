@@ -137,6 +137,17 @@ class lemsi {
         }
         $fields = implode(', ', $fields);
 
+        $missingColumns = self::checkMissingColumns($data);
+
+
+        if (!empty($missingColumns)) {
+            $arr = [];
+            foreach ($missingColumns as $key => $value) {
+                array_push($arr, array($value => $data->$value));
+            }
+            self::addColumns($arr);
+        }
+
         $query = "UPDATE {$table} SET {$fields} WHERE id = :id";
         $stmt = self::$db->prepare($query);
 
