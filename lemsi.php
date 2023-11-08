@@ -119,14 +119,33 @@ class lemsi {
         return true;
     }
     
-    public static function find($id) {
+    public static function find($value, $key = 'id', $operator = '=') {
         $table = self::$table;
-        $query = "SELECT * FROM {$table} WHERE id = :id";
+        $query = "SELECT * FROM {$table} WHERE {$key} {$operator} :{$key}";
         $stmt = self::$db->prepare($query);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':'.$key, $value);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public static function findAll($value, $key = 'id', $operator = '=') {
+        $table = self::$table;
+        $query = "SELECT * FROM {$table} WHERE {$key} {$operator} :{$key}";
+        $stmt = self::$db->prepare($query);
+        $stmt->bindValue(':'.$key, $value);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getAll($table) {
+        $query = "SELECT * FROM {$table}";
+        $stmt = self::$db->prepare($query);
+        $stmt->bindValue(':'.$key, $value);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public static function update($id, $data) {
